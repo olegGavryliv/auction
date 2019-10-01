@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {Product, ProductService} from './services/product-service';
 
 @Component({
   selector: 'app-root',
@@ -6,12 +7,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  name: string;
-  isValid: boolean;
-  title = 'Auction';
+  products: Array<Product> = []; // <1>
 
-    constructor() {
-    this.name = 'Angular';
-    this.isValid = false;
+  constructor(private productService: ProductService) { // <2>
+    this.products = this.productService.getProducts(); // <3>
   }
 }
