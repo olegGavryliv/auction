@@ -1,36 +1,11 @@
-
 <header>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" >
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </header>
 
 <app-auction-navbar></app-auction-navbar>
 
-<div class="container">
-  <div class="row">
-    <!-- Left column contains only search form the style col-md-3 comes from
-    Twitter Bootstrap grid system-->
-    <div class="col-md-3">
-      <app-auction-search></app-auction-search>
-    </div>
 
-    <!--
-      Right column which is the main area of the page contains two rows (as per Twitter Bootstrap):
-      1. First one keeps a carousel with featured products
-      2. Second one has a flexible grid with products.
-    -->
-    <div class="col-md-9">
-      <div class="row carousel-holder">
-        <div class="col-md-12">
-          <app-auction-carousel></app-auction-carousel>
-        </div>
-      </div>
-      <div class="row">
-        <div *ngFor="let prod of products" class="col-sm-4 col-lg-4 col-md-4">
-          <app-auction-product-item [product]="prod"></app-auction-product-item>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+
+<router-outlet></router-outlet>
 
 <app-auction-footer></app-auction-footer>

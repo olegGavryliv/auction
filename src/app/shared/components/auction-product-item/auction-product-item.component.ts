@@ -8,5 +8,6 @@ import {Product} from '../../../services/product-service';
 })
 export class AuctionProductItemComponent  {
   @Input() product: Product;
+
 }
 

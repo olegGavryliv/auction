@@ -2,6 +2,7 @@ export class Product {
   constructor(
     public id: number,
     public title: string,
+    public image: string,
     public price: number,
     public rating: number,
     public description: string,
@@ -11,7 +12,7 @@ export class Product {
 
 export class ProductService {
   getProducts(): Array<Product> {
-    return products.map(p => new Product(p.id, p.title, p.price, p.rating, p.description, p.categories));
+    return products.map(p => new Product(p.id, p.title, p.image, p.price, p.rating, p.description, p.categories));
   }
 }
 
@@ -20,6 +21,7 @@ const products = [
     id: 0,
     title: 'First Product',
     price: 24.99,
+    image: '',
     rating: 4.3,
     description: 'This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     categories: ['electronics', 'hardware']
@@ -28,6 +30,7 @@ const products = [
     id: 1,
     title: 'Second Product',
     price: 64.99,
+    image: '',
     rating: 3.5,
     description: 'This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     categories: ['books']
@@ -44,6 +47,7 @@ const products = [
     id: 3,
     title: 'Fourth Product',
     price: 84.99,
+    image: '',
     rating: 3.9,
     description: 'This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     categories: ['hardware']
@@ -60,6 +64,7 @@ const products = [
     id: 5,
     title: 'Sixth Product',
     price: 54.99,
+    image: '',
     rating: 4.6,
     description: 'This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     categories: ['books']
