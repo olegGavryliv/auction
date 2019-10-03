@@ -10,6 +10,6 @@ export class AuctionProductDetailComponent {
   productTitle: string;
 
   constructor(route: ActivatedRoute) {
-    this.productTitle = route.snapshot.params['prodTitle'];
+    this.productTitle = route.snapshot.params['prodTitle'.toString()];
   }
 }

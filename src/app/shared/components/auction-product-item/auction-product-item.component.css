@@ -1,5 +1,5 @@
 .caption {
-  height: 150px;
+  height: 200px;
   overflow: hidden;
 }
 .caption h4 { white-space: nowrap;}
@@ -8,9 +8,4 @@
 .thumbnail .caption-full {
   padding: 9px;
   color: #333;
-}
-.ratings {
-  color: #d17581;
-  padding-left: 10px;
-  padding-right: 10px;
 }
