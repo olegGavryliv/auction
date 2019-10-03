@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {Product, ProductService, Review} from '../../../services/product-service';
 
 @Component({
   selector: 'app-auction-product-detail',
@@ -7,9 +8,12 @@ import {ActivatedRoute} from '@angular/router';
   styleUrls: ['./auction-product-detail.component.css']
 })
 export class AuctionProductDetailComponent {
-  productTitle: string;
-
-  constructor(route: ActivatedRoute) {
-    this.productTitle = route.snapshot.params['prodTitle'.toString()];
+  product: Product;
+  reviews: Review[];
+  constructor(route: ActivatedRoute, productService: ProductService) {
+    const prodId: number =  parseInt(route.snapshot.params['productId'], 10);
+    this.product = productService.getProductById(prodId);
+    this.reviews = productService.getReviewsForProduct(this.product.id);
   }
 }
+

@@ -25,7 +25,7 @@ const appRoutes: Routes = [
   { path: '', component: AuctionHomeComponent },
   { path: 'login', component: LoginComponent , canDeactivate : [UnsavedChangesGuard]},
   { path: 'products', component: AuctionHomeComponent },
-  { path: 'products/:prodTitle', component: AuctionProductDetailComponent, canActivate : [LoginGuard]},
+  { path: 'products/:productId', component: AuctionProductDetailComponent, canActivate : [LoginGuard]},
   { path: '**', component: PageNotFoundComponent }
 ];
 

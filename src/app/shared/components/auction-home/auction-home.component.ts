@@ -11,9 +11,5 @@ export class AuctionHomeComponent {
 
   constructor(private productService: ProductService) {
     this.products = this.productService.getProducts();
-
-    for (const product of  this.products ) {
-      product.image = `https://picsum.photos/900/500?random&t=${Math.random()}`;
-    }
   }
 }
