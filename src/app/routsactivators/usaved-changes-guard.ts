@@ -20,8 +20,4 @@ export class UnsavedChangesGuard implements CanDeactivate<CanComponentDeactivate
     return component.canDeactivate ? component.canDeactivate() : true;
   }
 
-  /*canDeactivate() {
-    console.log('You have unsaved changes. Still want to leave?');
-    return window.confirm('You have unsaved changes. Still want to leave?');
-  }*/
 }

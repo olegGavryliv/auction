@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {Search} from '../../../services/search-service';
 
 @Component({
   selector: 'app-auction-search',
@@ -7,4 +8,9 @@ import {Component} from '@angular/core';
 })
 export class AuctionSearchComponent {
 
+  private search = new Search('', 0);
+
+  getSearchFormParam(): Search {
+    return this.search;
+  }
 }

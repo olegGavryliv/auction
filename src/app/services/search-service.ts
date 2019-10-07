@@ -1,5 +1,5 @@
-export class User {
+export class Search {
   constructor(
-    public email: string,
-    public password: string ) {}
+    public title: string,
+    public price: number ) {}
 }

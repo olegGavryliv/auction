@@ -17,12 +17,13 @@ import {RouterModule, Routes} from '@angular/router';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 import {LoginGuard} from './routsactivators/login-guard';
 import {UnsavedChangesGuard} from './routsactivators/usaved-changes-guard';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { LoginComponent } from './shared/components/login/login.component';
+import {FilterPipe} from './pipes/filter-pipe';
 
 
 const appRoutes: Routes = [
-  { path: '', component: AuctionHomeComponent },
+  { path: '', component: AuctionHomeComponent,  canDeactivate : [UnsavedChangesGuard] },
   { path: 'login', component: LoginComponent , canDeactivate : [UnsavedChangesGuard]},
   { path: 'products', component: AuctionHomeComponent },
   { path: 'products/:productId', component: AuctionProductDetailComponent, canActivate : [LoginGuard]},
@@ -43,13 +44,15 @@ const appRoutes: Routes = [
     AuctionProductDetailComponent,
     AuctionHomeComponent,
     PageNotFoundComponent,
-    LoginComponent
+    LoginComponent,
+    FilterPipe
   ],
   imports: [
     BrowserModule,
     NgbModule,
     RouterModule.forRoot(appRoutes), // for routing
-    FormsModule // f you want to use [(ngModel)] then you have to import FormsModule in app.module.ts
+    FormsModule, // f you want to use [(ngModel)] then you have to import FormsModule in app.module.ts
+    ReactiveFormsModule
   ],
   providers: [ProductService,  LoginGuard, UnsavedChangesGuard],
   bootstrap: [AppComponent],

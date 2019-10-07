@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {CanComponentDeactivate} from '../../../routsactivators/usaved-changes-guard';
-import {User} from '../../../services/search-service';
+import {User} from '../../../services/login-service';
 import {Observable} from 'rxjs';
 
 @Component({
