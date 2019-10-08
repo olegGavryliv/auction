@@ -1,9 +1,10 @@
 <p class="ratings">
-  <i *ngFor="let star of stars"
+  <i *ngFor="let star of stars; let i = index"
         class="far fa-star"
-        [class.fas.fa-star]="!star" aria-hidden="true">
+        [class.fas.fa-star]="star" aria-hidden="true"
+     (click)="fillStarsWithColor(i)">
   </i>
-  <i>{{ rating }} stars</i>
+  <span *ngIf="rating">{{rating | number:'.0-2'}} stars</span>
 </p>
 
 
