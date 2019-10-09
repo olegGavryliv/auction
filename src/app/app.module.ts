@@ -51,8 +51,8 @@ const appRoutes: Routes = [
     BrowserModule,
     NgbModule,
     RouterModule.forRoot(appRoutes), // for routing
-    FormsModule, // f you want to use [(ngModel)] then you have to import FormsModule in app.module.ts
-    ReactiveFormsModule
+    FormsModule, // if you want to use [(ngModel)] then you have to import FormsModule in app.module.ts
+    ReactiveFormsModule // to use reactive forms
   ],
   providers: [ProductService,  LoginGuard, UnsavedChangesGuard],
   bootstrap: [AppComponent],
