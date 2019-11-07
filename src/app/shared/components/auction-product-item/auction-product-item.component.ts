@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Product} from '../../../services/product-service';
+import {Component, Input} from '@angular/core';
+import {ProductService} from '../../../services/product-service';
 
 @Component({
   selector: 'app-auction-product-item',
@@ -7,7 +7,7 @@ import {Product} from '../../../services/product-service';
   styleUrls: ['./auction-product-item.component.css']
 })
 export class AuctionProductItemComponent  {
-  @Input() product: Product;
+  @Input() product: ProductService;
 
 }
 

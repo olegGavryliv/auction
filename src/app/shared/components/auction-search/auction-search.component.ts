@@ -1,8 +1,7 @@
 import {Component} from '@angular/core';
-import {Search} from '../../../services/search-service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ProductService} from '../../../services/product-service';
 import {positiveNumberValidator} from '../../../validator/validators';
+import {ProductService} from '../../../services/product-service';
 
 @Component({
   selector: 'app-auction-search',
@@ -32,7 +31,7 @@ export class AuctionSearchComponent {
     }
   }
 
-  getSearchFormParam(): Search {
+  getSearchFormParam(): any {
     return this.formModel.value;
   }
 

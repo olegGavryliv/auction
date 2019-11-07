@@ -1,7 +1,8 @@
 import {Component} from '@angular/core';
-import {CanComponentDeactivate} from '../../../routsactivators/usaved-changes-guard';
-import {User} from '../../../services/login-service';
+import {CanComponentDeactivate} from '../../../routs-activators/usaved-changes-guard';
+import {User} from '../../../model/user';
 import {Observable} from 'rxjs';
+import {UserService} from '../../../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -10,14 +11,32 @@ import {Observable} from 'rxjs';
 })
 export class LoginComponent implements CanComponentDeactivate {
 
- private user = new User('', '');
+  private user = new User('', '');
+
+  token: string = null;
+
+  done = false;
+
+  constructor(private userService: UserService) {
+  }
 
   onSubmit() {
-    console.log(this.user.email, this.user.password);
+    this.userService.loginUser(this.user).subscribe(
+      (data: string) => {
+        this.token = data;
+        this.done = true;
+      },
+      error => console.log(error)
+    );
+    console.log(this.token);
+    if (this.token != null) {
+      localStorage.setItem('id_token', this.token);
+    }
+
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
-    if ((this.user.email.length > 0 || this.user.password.length > 0)) {
+    if ((this.user.username.length > 0 || this.user.password.length > 0)) {
       return confirm('Your changes are unsaved!! Do you like to exit');
     }
     return true;

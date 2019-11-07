@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {Product, ProductService, Review} from '../../../services/product-service';
+import {ProductService} from '../../../services/product-service';
+import {Product, Review} from '../../../model/product';
+
 
 @Component({
   selector: 'app-auction-product-detail',

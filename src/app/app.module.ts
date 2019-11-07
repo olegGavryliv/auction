@@ -7,7 +7,6 @@ import {AuctionCarouselComponent} from './shared/components/auction-carousel/auc
 import {AuctionFooterComponent} from './shared/components/auction-footer/auction-footer.component';
 import {AuctionNavbarComponent} from './shared/components/auction-navbar/auction-navbar.component';
 import {AuctionSearchComponent} from './shared/components/auction-search/auction-search.component';
-import {ProductService} from './services/product-service';
 import { AuctionStarsComponent } from './shared/components/auction-stars/auction-stars.component';
 import { AuctionProductItemComponent } from './shared/components/auction-product-item/auction-product-item.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -15,11 +14,14 @@ import {AuctionProductDetailComponent} from './shared/components/auction-product
 import {AuctionHomeComponent} from './shared/components/auction-home/auction-home.component';
 import {RouterModule, Routes} from '@angular/router';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
-import {LoginGuard} from './routsactivators/login-guard';
-import {UnsavedChangesGuard} from './routsactivators/usaved-changes-guard';
+import {LoginGuard} from './routs-activators/login-guard';
+import {UnsavedChangesGuard} from './routs-activators/usaved-changes-guard';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { LoginComponent } from './shared/components/login/login.component';
 import {FilterPipe} from './pipes/filter-pipe';
+import {HttpClientModule} from '@angular/common/http';
+import {ProductService} from './services/product-service';
+import {UserService} from './services/user.service';
 
 
 const appRoutes: Routes = [
@@ -52,10 +54,11 @@ const appRoutes: Routes = [
     NgbModule,
     RouterModule.forRoot(appRoutes), // for routing
     FormsModule, // if you want to use [(ngModel)] then you have to import FormsModule in app.module.ts
-    ReactiveFormsModule // to use reactive forms
+    ReactiveFormsModule, // to use reactive forms
+    HttpClientModule // for http requests
   ],
-  providers: [ProductService,  LoginGuard, UnsavedChangesGuard],
+  providers: [ProductService,  LoginGuard, UnsavedChangesGuard, UserService],
   bootstrap: [AppComponent],
-  exports: [RouterModule]
+  exports: []
 })
 export class AppModule { }

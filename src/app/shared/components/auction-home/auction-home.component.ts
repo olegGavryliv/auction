@@ -1,10 +1,11 @@
 import {Component, ViewChild} from '@angular/core';
-import {Product, ProductService} from '../../../services/product-service';
 import {FormControl} from '@angular/forms';
 import {debounceTime} from 'rxjs/operators';
-import {CanComponentDeactivate} from '../../../routsactivators/usaved-changes-guard';
+import {CanComponentDeactivate} from '../../../routs-activators/usaved-changes-guard';
 import {Observable} from 'rxjs';
 import {AuctionSearchComponent} from '../auction-search/auction-search.component';
+import {ProductService} from '../../../services/product-service';
+import {Product} from '../../../model/product';
 
 
 @Component({
@@ -17,7 +18,7 @@ export class AuctionHomeComponent implements CanComponentDeactivate {
   @ViewChild('childSearch')
   firstChild: AuctionSearchComponent;
 
-  products: Product[] = [];
+  products: Product [] = [];
   titleFilter: FormControl = new FormControl();
   filterCriteria: string;
 
