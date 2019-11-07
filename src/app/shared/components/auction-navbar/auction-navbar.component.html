@@ -10,15 +10,21 @@
         <a class="nav-link" [routerLink]="'/products'" routerLinkActive="active">Products</a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link"  href="#">About</a>
+        <a class="nav-link"   [routerLink]="'/about'" >About</a>
       </li>
       <li class="nav-item">
         <a class="nav-link"  href="#">Contact</a>
       </li>
       <div class="login-container">
-      <li class="nav-item">
+      <li [hidden]="currentUser" class="nav-item">
         <button class="nav-link" [routerLink]="'/login'" type="submit">Login</button>
       </li>
+      </div>
+      <li class="nav-item">
+        <button class="nav-link" (click)="logout()" type="submit">Logout</button>
+      </li>
+      <div>
+        <h1 style="color:red" *ngIf="currentUser"> User {{currentUser.username}}</h1>
       </div>
     </ul>
   </div>

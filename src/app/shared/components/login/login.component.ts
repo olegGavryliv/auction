@@ -1,38 +1,45 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CanComponentDeactivate} from '../../../routs-activators/usaved-changes-guard';
 import {User} from '../../../model/user';
 import {Observable} from 'rxjs';
-import {UserService} from '../../../services/user.service';
+import {AuthenticationService} from '../../../services/authentication.service';
+import {first} from 'rxjs/operators';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements CanComponentDeactivate {
+export class LoginComponent implements CanComponentDeactivate, OnInit {
 
-  private user = new User('', '');
+  private user = new User('', '', '');
 
-  token: string = null;
+  loading = false;
+  submitted = false;
+  returnUrl: string;
+  error = '';
 
-  done = false;
+  constructor(private userService: AuthenticationService, private route: ActivatedRoute, private router: Router, ) {
+  }
 
-  constructor(private userService: UserService) {
+
+  ngOnInit() {
+    // get return url from route parameters or default to '/'
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   onSubmit() {
-    this.userService.loginUser(this.user).subscribe(
-      (data: string) => {
-        this.token = data;
-        this.done = true;
-      },
-      error => console.log(error)
-    );
-    console.log(this.token);
-    if (this.token != null) {
-      localStorage.setItem('id_token', this.token);
-    }
-
+    this.submitted = true;
+    this.userService.loginUser(this.user).pipe(first())
+      .subscribe(
+        data => {
+          this.router.navigate([this.returnUrl]);
+        },
+        error => {
+          this.error = error;
+          this.loading = false;
+        });
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {

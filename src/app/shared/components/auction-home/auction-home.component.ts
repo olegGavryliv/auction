@@ -34,7 +34,7 @@ export class AuctionHomeComponent implements CanComponentDeactivate {
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
     const title = this.firstChild.getSearchFormParam().title;
     const price = this.firstChild.getSearchFormParam().price;
-    if (title != null  && title.length > 0 || price != null && price.valueOf() > 0 ) {
+    if (title != null && title.length > 0 || price != null && price.valueOf() > 0) {
       return confirm('Your changes are unsaved!! Do you like to exit');
     }
     return true;

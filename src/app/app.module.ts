@@ -1,35 +1,38 @@
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-
-import { AppComponent } from './app.component';
+import {AppComponent} from './app.component';
 import {AuctionCarouselComponent} from './shared/components/auction-carousel/auction-carousel.component';
 import {AuctionFooterComponent} from './shared/components/auction-footer/auction-footer.component';
 import {AuctionNavbarComponent} from './shared/components/auction-navbar/auction-navbar.component';
 import {AuctionSearchComponent} from './shared/components/auction-search/auction-search.component';
-import { AuctionStarsComponent } from './shared/components/auction-stars/auction-stars.component';
-import { AuctionProductItemComponent } from './shared/components/auction-product-item/auction-product-item.component';
+import {AuctionStarsComponent} from './shared/components/auction-stars/auction-stars.component';
+import {AuctionProductItemComponent} from './shared/components/auction-product-item/auction-product-item.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AuctionProductDetailComponent} from './shared/components/auction-product-detail/auction-product-detail.component';
 import {AuctionHomeComponent} from './shared/components/auction-home/auction-home.component';
 import {RouterModule, Routes} from '@angular/router';
-import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
-import {LoginGuard} from './routs-activators/login-guard';
+import {PageNotFoundComponent} from './shared/components/page-not-found/page-not-found.component';
 import {UnsavedChangesGuard} from './routs-activators/usaved-changes-guard';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { LoginComponent } from './shared/components/login/login.component';
+import {LoginComponent} from './shared/components/login/login.component';
 import {FilterPipe} from './pipes/filter-pipe';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {ProductService} from './services/product-service';
-import {UserService} from './services/user.service';
+import {AuthenticationService} from './services/authentication.service';
+import {AuctionAboutComponent} from './shared/components/auction-about/auction-about.component';
+import {AuthGuard} from './routs-activators/auth-guard';
+import {JwtInterceptor} from './routs-activators/jwt-interceptor';
+import {ErrorInterceptor} from './routs-activators/error-interceptor';
 
 
 const appRoutes: Routes = [
-  { path: '', component: AuctionHomeComponent,  canDeactivate : [UnsavedChangesGuard] },
-  { path: 'login', component: LoginComponent , canDeactivate : [UnsavedChangesGuard]},
-  { path: 'products', component: AuctionHomeComponent },
-  { path: 'products/:productId', component: AuctionProductDetailComponent, canActivate : [LoginGuard]},
-  { path: '**', component: PageNotFoundComponent }
+  {path: '', component: AuctionHomeComponent, canDeactivate: [UnsavedChangesGuard]},
+  {path: 'login', component: LoginComponent},
+  {path: 'products', component: AuctionHomeComponent, canActivate: [AuthGuard]},
+  {path: 'products/:productId', component: AuctionProductDetailComponent, canActivate: [AuthGuard]},
+  {path: 'about', component: AuctionAboutComponent, canActivate: [AuthGuard]},
+  {path: '**', component: PageNotFoundComponent}
 ];
 
 
@@ -47,7 +50,8 @@ const appRoutes: Routes = [
     AuctionHomeComponent,
     PageNotFoundComponent,
     LoginComponent,
-    FilterPipe
+    FilterPipe,
+    AuctionAboutComponent
   ],
   imports: [
     BrowserModule,
@@ -57,8 +61,12 @@ const appRoutes: Routes = [
     ReactiveFormsModule, // to use reactive forms
     HttpClientModule // for http requests
   ],
-  providers: [ProductService,  LoginGuard, UnsavedChangesGuard, UserService],
+  providers: [ProductService, UnsavedChangesGuard, AuthenticationService, AuthGuard,
+
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }],
   bootstrap: [AppComponent],
   exports: []
 })
-export class AppModule { }
+export class AppModule {
+}
