@@ -5,6 +5,7 @@ import {Observable} from 'rxjs';
 import {AuthenticationService} from '../../../services/authentication.service';
 import {first} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,9 @@ export class LoginComponent implements CanComponentDeactivate, OnInit {
   loading = false;
   submitted = false;
   returnUrl: string;
-  error = '';
+  error: any;
+
+  private details: string[];
 
   constructor(private userService: AuthenticationService, private route: ActivatedRoute, private router: Router, ) {
   }
@@ -31,15 +34,16 @@ export class LoginComponent implements CanComponentDeactivate, OnInit {
 
   onSubmit() {
     this.submitted = true;
-    this.userService.loginUser(this.user).pipe(first())
+    this.userService.loginUser(this.user)
+      .pipe(first())
       .subscribe(
         data => {
+          this.user = data;
           this.router.navigate([this.returnUrl]);
+          },
+            error => {this.error = error.message; console.log(error);
         },
-        error => {
-          this.error = error;
-          this.loading = false;
-        });
+  );
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
