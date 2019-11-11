@@ -20,7 +20,7 @@
         <button class="nav-link" [routerLink]="'/login'" type="submit">Login</button>
       </li>
       </div>
-      <li class="nav-item">
+      <li *ngIf="currentUser" class="nav-item">
         <button class="nav-link" (click)="logout()" type="submit">Logout</button>
       </li>
       <div>

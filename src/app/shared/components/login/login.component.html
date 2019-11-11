@@ -11,16 +11,24 @@
   <div class="form-group " >
     <label for="username">Username</label>
     <input type="text" formControlName="username" class="form-control"  id="username" />
-
+    <div class="alert alert-danger"
+         *ngIf="f['username'].invalid && f['username'].touched">
+      Username is required
+    </div>
+  </div>
   <div class="form-group"  >
     <label for="password">Password</label>
     <input type="password" formControlName="password" class="form-control" id="password"  />
-
-  </div>
-  <div class="form-group">
-  <button type="submit" class="btn btn-primary">Login</button>
-  </div>
+    <div class="alert alert-danger"
+         *ngIf="f['password'].invalid && f['password'].touched">
+      Password is required
     </div>
+  </div>
+
+  <div class="form-group">
+  <button type="submit" class="btn btn-primary"  [disabled]="loginForm.invalid">Login</button>
+  </div>
+
   </div>
   </div>
 </form>

@@ -36,8 +36,8 @@ export class LoginComponent implements CanComponentDeactivate, OnInit {
   ngOnInit() {
     this.loginForm = this.formBuilder.group(
       {
-        username: [''/*, Validators.required*/],
-        password: [''/*, Validators.required*/]
+        username: ['Tom', Validators.required],
+        password: ['password', Validators.required]
       });
     this.errors = [];
 
@@ -65,9 +65,7 @@ export class LoginComponent implements CanComponentDeactivate, OnInit {
                         error.error.details.forEach(obj => {
                           this.errors.push(obj.messages);
                         });
-                       } else {
-                this.errors.push('something went wrong!');
-              }
+                       }
             });
 }
 
