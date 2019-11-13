@@ -1,7 +1,9 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ProductService} from '../../../services/product-service';
 import {Product, Review} from '../../../model/product';
+import {first} from 'rxjs/operators';
+import {AlertService} from '../../../services/alert-service';
 
 
 @Component({
@@ -9,27 +11,51 @@ import {Product, Review} from '../../../model/product';
   templateUrl: './auction-product-detail.component.html',
   styleUrls: ['./auction-product-detail.component.css']
 })
-export class AuctionProductDetailComponent {
+export class AuctionProductDetailComponent implements OnInit {
   product: Product;
   reviews: Review[];
-
+  
   newComment: string;
   newRating: number;
 
   isReviewHidden = true;
 
-  constructor(route: ActivatedRoute, productService: ProductService) {
-    const prodId: number = parseInt(route.snapshot.params['productId'], 10);
-    this.product = productService.getProductById(prodId);
-    this.reviews = productService.getReviewsForProduct(this.product.id);
+  constructor(private route: ActivatedRoute, private productService: ProductService, private alertService: AlertService) {
+
   }
 
+  ngOnInit() {
+    const prodId: number = parseInt(this.route.snapshot.params['productId'], 10);
+    this.productService.getProductById(prodId)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.product = data;
+          this.reviews = data['reviews'];
+        },
+        error => {
+          this.alertService.error(error.error.message, true);
+        });
+  }
+
+
   addReview() {
-    const review = new Review(0, this.product.id, new Date(), 'Anonymous',
-      this.newRating, this.newComment);
-    this.reviews = [...this.reviews, review];
-    this.product.rating = this.averageRating(this.reviews);
-    this.resetForm();
+    const review = new Review();
+
+    review.comment = this.newComment;
+    review.productId = this.product.id;
+    review.rating = this.newRating;
+
+    this.productService.addReviewRequest(review).pipe(first())
+      .subscribe(
+        data => {
+          this.reviews = [...this.reviews, data];
+          this.product.rating = this.averageRating(this.reviews);
+          this.resetForm();
+        },
+        error => {
+          this.alertService.error(error.error.message, true);
+        });
   }
 
   averageRating(reviews: Review[]) {
@@ -42,6 +68,8 @@ export class AuctionProductDetailComponent {
     this.newComment = null;
     this.isReviewHidden = true;
   }
+
+
 
 }
 

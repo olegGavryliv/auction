@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthenticationService} from '../../../services/authentication.service';
-import {first} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
+import {RegistrationService} from '../../../services/registration.service';
+import {first} from 'rxjs/operators';
+import {AlertService} from '../../../services/alert-service';
 
 @Component({
   selector: 'app-auction-registration',
@@ -13,11 +15,13 @@ export class AuctionRegistrationComponent implements OnInit {
 
   registerForm: FormGroup;
 
-  submitted = false;
+  error: any;
+  errors: string[];
 
-  constructor(private formBuilder: FormBuilder,  private authenticationService: AuthenticationService,
+  constructor(private formBuilder: FormBuilder, private authenticationService: AuthenticationService,
               private route: ActivatedRoute,
-              private router: Router) {
+              private router: Router,
+              private registerService: RegistrationService, private alertService: AlertService ) {
     if (this.authenticationService.currentUserValue) {
       this.router.navigate(['/']);
     }
@@ -25,30 +29,37 @@ export class AuctionRegistrationComponent implements OnInit {
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      username: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      username: ['pastor2', Validators.required],
+      email: ['kurm6886@gmail.com', Validators.required],
+      password: ['password23', Validators.required]
     });
+    this.errors = [];
   }
 
- /* onSubmit() {
-    this.submitted = true;
+  get f() {
+   return this.registerForm.controls;
+  }
 
-    // stop here if form is invalid
-    if (this.loginForm.invalid) {
-      return;
-    }
 
-    this.authenticationService.login(this.f.username.value, this.f.password.value)
+  onSubmit() {
+
+    this.errors = [];
+
+    this.registerService.registerUser(this.f.username.value, this.f.email.value, this.f.password.value)
       .pipe(first())
       .subscribe(
         data => {
-          this.router.navigate([this.returnUrl]);
+          this.alertService.success('Registration successful', true);
+          this.router.navigate(['']);
         },
         error => {
-          this.alertService.error(error);
+          this.alertService.error(error.error.message, true);
+          if (error.status === 400) {
+            error.error.details.forEach(obj => {
+              this.errors.push(obj.messages);
+            });
+          }
         });
-  }*/
+  }
 
 }

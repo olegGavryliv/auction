@@ -12,6 +12,9 @@
       <li class="nav-item active">
         <a class="nav-link"   [routerLink]="'/about'" >About</a>
       </li>
+      <li class="nav-item active">
+        <a class="nav-link"   [routerLink]="'/add-product'" >AddProduct</a>
+      </li>
       <li class="nav-item">
         <a class="nav-link"  href="#">Contact</a>
       </li>
@@ -20,12 +23,15 @@
         <button class="nav-link" [routerLink]="'/login'" type="submit">Login</button>
       </li>
       </div>
+      <li [hidden]="currentUser" class="nav-item">
+        <button class="nav-link" [routerLink]="'/register'" type="submit">Registration</button>
+      </li>
       <li *ngIf="currentUser" class="nav-item">
         <button class="nav-link" (click)="logout()" type="submit">Logout</button>
       </li>
-      <div>
-        <h1 style="color:red" *ngIf="currentUser"> User {{currentUser.username}}</h1>
-      </div>
+      <li>
+      <h1 style="color:red" *ngIf="currentUser"> User {{currentUser.username}}</h1>
+      </li>
     </ul>
   </div>
 </nav>

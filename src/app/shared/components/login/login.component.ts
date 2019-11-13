@@ -16,7 +16,6 @@ import {AlertService} from '../../../services/alert-service';
 })
 export class LoginComponent implements CanComponentDeactivate, OnInit {
 
-  private user = new User('', '', '');
   loginForm: FormGroup;
   submitted = false;
   returnUrl: string;
@@ -41,7 +40,7 @@ export class LoginComponent implements CanComponentDeactivate, OnInit {
       });
     this.errors = [];
 
-    // get return url from route parameters or default to '/'
+
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
@@ -55,7 +54,6 @@ export class LoginComponent implements CanComponentDeactivate, OnInit {
       .pipe(first())
       .subscribe(
         data => {
-          this.user = data;
           this.alertService.success('Login successful', true);
           this.router.navigate([this.returnUrl]);
           },
@@ -70,7 +68,7 @@ export class LoginComponent implements CanComponentDeactivate, OnInit {
 }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
-    if ((this.user.username.length > 0 || this.user.password.length > 0)) {
+    if ((this.f.username.value.length > 0 || this.f.password.value.length > 0)) {
       return confirm('Your changes are unsaved!! Do you like to exit');
     }
     return true;

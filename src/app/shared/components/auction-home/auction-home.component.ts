@@ -1,11 +1,12 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {debounceTime} from 'rxjs/operators';
+import {first} from 'rxjs/operators';
 import {CanComponentDeactivate} from '../../../routs-activators/usaved-changes-guard';
 import {Observable} from 'rxjs';
 import {AuctionSearchComponent} from '../auction-search/auction-search.component';
 import {ProductService} from '../../../services/product-service';
 import {Product} from '../../../model/product';
+import {AlertService} from '../../../services/alert-service';
 
 
 @Component({
@@ -13,7 +14,7 @@ import {Product} from '../../../model/product';
   templateUrl: './auction-home.component.html',
   styleUrls: ['./auction-home.component.css']
 })
-export class AuctionHomeComponent implements CanComponentDeactivate {
+export class AuctionHomeComponent implements CanComponentDeactivate, OnInit {
 
   @ViewChild('childSearch')
   firstChild: AuctionSearchComponent;
@@ -22,14 +23,10 @@ export class AuctionHomeComponent implements CanComponentDeactivate {
   titleFilter: FormControl = new FormControl();
   filterCriteria: string;
 
-  constructor(private productService: ProductService) {
-    this.products = this.productService.getProducts();
-    this.titleFilter.valueChanges.pipe(
-      debounceTime(100))
-      .subscribe(
-        value => this.filterCriteria = value,
-        error => console.error(error));
+  constructor(private productService: ProductService, private alertService: AlertService) {
+
   }
+
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
     const title = this.firstChild.getSearchFormParam().title;
@@ -38,6 +35,19 @@ export class AuctionHomeComponent implements CanComponentDeactivate {
       return confirm('Your changes are unsaved!! Do you like to exit');
     }
     return true;
+  }
+
+  ngOnInit() {
+    this.productService.getProducts()
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.products = data;
+        },
+        error => {
+          this.alertService.error(error.error.message, true);
+
+        });
   }
 
 }

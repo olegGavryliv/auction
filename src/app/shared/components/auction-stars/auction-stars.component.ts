@@ -12,11 +12,11 @@ export class AuctionStarsComponent {
 
   @Input()
   readonly = true;
-  @Input()
-  get rating(): number {
-    return this.ratinG;
-  }
 
+  get rating(): number {
+    return this.ratinG ?  this.ratinG : 0;
+  }
+  @Input()
   set rating(value: number) {
     this.ratinG = value || 0;
     this.stars = Array(this.maxStars).fill(true, 0, this.rating);

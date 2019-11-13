@@ -2,9 +2,9 @@
 <div class="thumbnail">
   <img src="{{product.image}}" >
   <div class="caption">
-    <h4 class="pull-right">{{ product.price }}</h4>
-    <h4><a [routerLink]="['/products', product.id]">{{ product.title }}</a></h4>
-    <p>{{ product.description }}</p>
+    <h4 class="pull-right"> Price:{{ product.price  ? product.price : 'not specified' }}</h4>
+    <h4><a [routerLink]="['/products', product.id]"> {{ product.name }}</a></h4>
+    <p> Description:{{ product.description }}</p>
     <div>
       <app-auction-stars [rating]="product.rating"></app-auction-stars>
     </div>
