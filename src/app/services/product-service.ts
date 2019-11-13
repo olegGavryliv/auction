@@ -1,99 +1,94 @@
 import {Product, Review} from '../model/product';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Observable, throwError} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
 
-
+@Injectable()
 export class ProductService {
-  getProducts(): Array<Product> {
-    return products.map(p => new Product(p.id, p.title, p.image, p.price, p.rating, p.description, p.categories));
-  }
 
-  getProductById(productId: number): Product {
-     return products.find(o => o.id === productId);
+  constructor(private http: HttpClient) {
 
   }
 
-  getReviewsForProduct(productId: number): Review[] {
-    return reviews
-      .filter(r => r.productId === productId)
-      .map(r => new Review(r.id, r.productId, new Date(r.timestamp),
-        r.user, r.rating, r.comment));
+  getProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>('http://localhost:8080/auction/products')
+      .pipe(map(data => {
+        const productList = data['products'];
+        return productList.map(product => ({
+          id: product.id,
+          name: product.name,
+          description: product.description,
+          price: product.price,
+          rating: product.rating,
+          image: product.image,
+          owner : product.owner
+        }));
+        }
+      ));
+
+    //  return products.map(p => new Product(p.id, p.name, p.image, p.price, p.rating, p.description, p.categories));
   }
+
+  getProductById(productId: number): Observable<Product> {
+    return this.http.get<Product>('http://localhost:8080/auction/products/' + productId)
+      .pipe(map(data => {
+          return data;
+        }),
+        catchError(err => {
+          console.log(err);
+          return throwError(err);
+        }));
+  }
+
+
+  addReviewRequest(review: Review): Observable<Review> {
+    console.log(review);
+    const myHeaders = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    return this.http.post<Review>('http://localhost:8080/auction/reviews', review , {headers: myHeaders} )
+      .pipe(map(data => {
+          return data;
+        }),
+        catchError(err => {
+          console.log(err);
+          return throwError(err);
+        }));
+  }
+
+ //   return products.find(o => o.id === productId);
+
 
   getAllCategories(): string[] {
     return ['Books', 'Electronics', 'Hardware'];
   }
-}
 
-const reviews = [
-  {
-    id: 0,
-    productId: 0,
-    timestamp: '2014-05-20T02:17:00+00:00',
-    user: 'User 1',
-    rating: 5,
-    comment: 'Aenean vestibulum velit id placerat posuere. Praesent...'},
-  {
-    id: 1,
-    productId: 0,
-    timestamp: '2014-05-20T02:53:00+00:00',
-    user: 'User 2',
-    rating: 3,
-    comment: 'Aenean vestibulum velit id placerat posuere. Praesent... '
-  }];
-
-
-const products = [
-  {
-    id: 0,
-    title: 'First Product',
-    price: 24.99,
-    image: `https://picsum.photos/900/500?random&t=${Math.random()}`,
-    rating: 4.3,
-    description: 'This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    categories: ['electronics', 'hardware']
-  },
-  {
-    id: 1,
-    title: 'Second Product',
-    price: 64.99,
-    image: `https://picsum.photos/900/500?random&t=${Math.random()}`,
-    rating: 3.5,
-    description: 'This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    categories: ['books']
-  },
-  {
-    id: 2,
-    title: 'Third Product',
-    price: 74.99,
-    image: `https://picsum.photos/900/500?random&t=${Math.random()}`,
-    rating: 4.2,
-    description: 'This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    categories: ['electronics']
-  },
-  {
-    id: 3,
-    title: 'Fourth Product',
-    price: 84.99,
-    image: `https://picsum.photos/900/500?random&t=${Math.random()}`,
-    rating: 3.9,
-    description: 'This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    categories: ['hardware']
-  },
-  {
-    id: 4,
-    title: 'Fifth Product',
-    price: 94.99,
-    image: `https://picsum.photos/900/500?random&t=${Math.random()}`,
-    rating: 5,
-    description: 'This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    categories: ['electronics', 'hardware']
-  },
-  {
-    id: 5,
-    title: 'Sixth Product',
-    price: 54.99,
-    image: `https://picsum.photos/900/500?random&t=${Math.random()}`,
-    rating: 4.6,
-    description: 'This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    categories: ['books']
+  getAny3ProductsImages(): Observable<string[]> {
+    return this.http.get<string[]>('http://localhost:8080/auction/products/random/images')
+      .pipe(map(data => {
+          return data;
+        }),
+        catchError(err => {
+          console.log(err);
+          return throwError(err);
+        }));
   }
-];
+
+  addProduct(nameUI: string, descriptionUI: string, priceUI: number) {
+    {
+      const body = {name: nameUI, description: descriptionUI,  price: priceUI};
+      const myHeaders = new HttpHeaders({
+        'Content-Type': 'application/json'
+      });
+      return this.http.post<Review>('http://localhost:8080/auction/products', body , {headers: myHeaders} )
+        .pipe(map(data => {
+            return data;
+          }),
+          catchError(err => {
+            console.log(err);
+            return throwError(err);
+          }));
+    }
+  }
+}

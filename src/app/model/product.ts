@@ -1,22 +1,28 @@
+import {User} from './user';
+
 export class Product {
-  constructor(
-    public id: number,
-    public title: string,
-    public image: string,
-    public price: number,
-    public rating: number,
-    public description: string,
-    public categories: Array<string>) {
+
+  id: number;
+  name: string;
+  image: string;
+  price: number;
+  rating: number;
+  description: string;
+  owner: User;
+  categories: Array<string>;
+
+  constructor() {
   }
 }
 
 export class Review {
-  constructor(
-    public id: number,
-    public productId: number,
-    public timestamp: Date,
-    public user: string,
-    public rating: number,
-    public comment: string) {
+  id: number;
+  productId: number;
+  timestamp: Date;
+  reviewer: User;
+  rating: number;
+  comment: string;
+
+  constructor() {
   }
 }

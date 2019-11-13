@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {User} from '../model/user';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {BehaviorSubject, Observable, throwError} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
 
 @Injectable()
 export class AuthenticationService {
@@ -19,26 +19,36 @@ export class AuthenticationService {
     return this.currentUserSubject.value;
   }
 
-  loginUser(user: User) {
-    const body = {username: user.username, password: user.password};
+  loginUser(name: string, pass: string): Observable<User> {
+    const body = {username: name, password: pass};
     console.log(body);
     const myHeaders = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    return this.http.post<any>('http://localhost:8080/auction/users/login', body, {headers: myHeaders})
+    return this.http.post<User>('http://localhost:8080/auction/users/login', body, {headers: myHeaders})
       .pipe(map(data => {
-        // store user details and jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem('currentUser', JSON.stringify( new User(user.username, user.password,  data.token)));
-        console.log(localStorage.getItem('currentUser'));
-        this.currentUserSubject.next(new User(user.username, user.password,  data.token));
-        return user;
-      }));
+          // store reviewer details and jwt token in local storage to keep reviewer logged in between page refreshes
+       const loginedUser = new User(name, pass, data.token);
+       localStorage.setItem('currentUser', JSON.stringify(loginedUser));
+       this.currentUserSubject.next(loginedUser);
+       return loginedUser;
+        }),
+        catchError(err => {
+          console.log(err);
+          return throwError(err);
+        }));
   }
 
+  registerUser(user: User) {
+    this.currentUserSubject.next(user);
+  }
+
+
   logout() {
-    // remove user from local storage to log user out
+    // remove reviewer from local storage to log reviewer out
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
   }
+
 }

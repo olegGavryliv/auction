@@ -24,12 +24,18 @@ import {AuctionAboutComponent} from './shared/components/auction-about/auction-a
 import {AuthGuard} from './routs-activators/auth-guard';
 import {JwtInterceptor} from './routs-activators/jwt-interceptor';
 import {ErrorInterceptor} from './routs-activators/error-interceptor';
+import { AuctionRegistrationComponent } from './shared/components/auction-registration/auction-registration.component';
+import {AlertService} from './services/alert-service';
+import { AuctionAlterComponentComponent } from './shared/components/auction-alter-component/auction-alter-component.component';
+import { AuctionAddProductComponent } from './shared/components/auction-add-product/auction-add-product.component';
 
 
 const appRoutes: Routes = [
   {path: '', component: AuctionHomeComponent, canDeactivate: [UnsavedChangesGuard]},
   {path: 'login', component: LoginComponent},
+  {path: 'register', component: AuctionRegistrationComponent},
   {path: 'products', component: AuctionHomeComponent, canActivate: [AuthGuard]},
+  {path: 'add-product', component: AuctionAddProductComponent, canActivate: [AuthGuard]},
   {path: 'products/:productId', component: AuctionProductDetailComponent, canActivate: [AuthGuard]},
   {path: 'about', component: AuctionAboutComponent, canActivate: [AuthGuard]},
   {path: '**', component: PageNotFoundComponent}
@@ -44,14 +50,16 @@ const appRoutes: Routes = [
     AuctionNavbarComponent,
     AuctionSearchComponent,
     AuctionStarsComponent,
-    AuctionStarsComponent,
     AuctionProductItemComponent,
     AuctionProductDetailComponent,
     AuctionHomeComponent,
     PageNotFoundComponent,
     LoginComponent,
     FilterPipe,
-    AuctionAboutComponent
+    AuctionAboutComponent,
+    AuctionRegistrationComponent,
+    AuctionAlterComponentComponent,
+    AuctionAddProductComponent
   ],
   imports: [
     BrowserModule,
@@ -61,10 +69,10 @@ const appRoutes: Routes = [
     ReactiveFormsModule, // to use reactive forms
     HttpClientModule // for http requests
   ],
-  providers: [ProductService, UnsavedChangesGuard, AuthenticationService, AuthGuard,
-
+  providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }],
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    ProductService, UnsavedChangesGuard, AuthenticationService, AuthGuard, AlertService ],
   bootstrap: [AppComponent],
   exports: []
 })
